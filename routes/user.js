@@ -4,15 +4,23 @@ const { User, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const sendEmail = require('../services/mailer');  // Adjust the path as per your project structure
+
 
 // User Routes
 router.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
         await User.create({ username, password });
-        res.json({ msg: "User signup successful" });
+        
+        // Send welcome email
+        const subject = "Welcome to Dreamscape Realty!";
+        const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest,\nThe Dreamscape Team`;
+        await sendEmail(username, subject, message);  // Send email to user
+
+        res.json({ msg: "User signup successful. Welcome email sent!" });
     } catch (error) {
-        res.status(500).json({ msg: "Error occurred during signup", error: error.message });
+        res.status(500).json({ msg: "Error during signup", error: error.message });
     }
 });
 
@@ -44,27 +52,29 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
     const username = req.headers.username;
 
     try {
-        console.log("Username received:", username);
-
         const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
 
-        // Check if user already purchased the property
         if (user.purchasedProperties.includes(PropertyId)) {
             return res.status(400).json({ msg: "Property already purchased" });
         }
 
-        // Add the property to the user's purchasedProperties array
+        // Add property to user's purchasedProperties
         await User.updateOne(
             { username },
             { "$push": { purchasedProperties: PropertyId } }
         );
 
-        res.json({ message: "Purchase complete!" });
+        // Send purchase confirmation email
+        const subject = "Property Purchase Confirmation";
+        const message = `Dear ${username},\n\nThank you for purchasing a property on Dreamscape Realty. Your property purchase (ID: ${PropertyId}) is confirmed.\n\nBest,\nThe Dreamscape Team`;
+        await sendEmail(username, subject, message);  // Send email to user
+
+        res.json({ message: "Purchase complete! Confirmation email sent." });
     } catch (error) {
-        res.status(500).json({ msg: "Error purchasing property", error: error.message });
+        res.status(500).json({ msg: "Error during property purchase", error: error.message });
     }
 });
 
