@@ -140,8 +140,4 @@ The application expects the following environment variables in the `.env` file:
 2. **Ensure all features and enhancements** accurately reflect your project.
 3. **Push changes to GitHub** once you've updated your local README:
 
-```bash
-git add README.md
-git commit -m "Updated README with project details"
-git push origin main
-```
+
