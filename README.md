@@ -1,6 +1,6 @@
 # Dreamscape Realty
 
-A responsive real estate website that allows users to browse, purchase, and manage properties with an admin portal for property management. The project is built using **Node.js**, **Express**, **MongoDB**, and **JWT** authentication, and features CRUD operations for properties
+A responsive real estate website that allows users to browse, purchase, and manage properties with an admin portal for property management. The project is built using **Node.js**, **Express**, **MongoDB**, and **JWT** authentication, and features CRUD operations for properties.
 
 ## Table of Contents
 
