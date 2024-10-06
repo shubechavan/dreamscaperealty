@@ -15,7 +15,7 @@ router.post('/signup', async (req, res) => {
         
         // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
-        const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest,\nThe Dreamscape Team`;
+        const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest Regards,\nThe Dreamscape Team`;
         await sendEmail(username, subject, message);  // Send email to user
 
         res.json({ msg: "User signup successful. Welcome email sent!" });
