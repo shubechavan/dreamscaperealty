@@ -74,7 +74,7 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
 
         res.json({ message: "Purchase complete! Confirmation email sent." });
     } catch (error) {
-        res.status(500).json({ msg: "Error during property purchase", error: error.message });
+        res.status(500).json({ msg: "Error occur during property purchase", error: error.message });
     }
 });
 
