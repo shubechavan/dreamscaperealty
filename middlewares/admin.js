@@ -8,7 +8,7 @@ function adminMiddleware(req, res, next) {
         return res.status(401).json({ msg: "No token provided" });
     }
 
-    const token = authHeader.split(' ')[1]; // Bearer <token>
+    const token = authHeader.split(' ')[1]; // Bearer <Token>
 
     if (!token) {
         return res.status(401).json({ msg: "Invalid token format" });
