@@ -4,9 +4,8 @@ const { Admin, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-const sendEmail = require('../services/mailer');  // Adjust the path as per your project structure
+const sendEmail = require('../services/mailer');  
 
-// Helper function for email content
 const getAdminSignupMessage = (username) => {
     return `Dear ${username},
 
@@ -46,10 +45,10 @@ router.post('/signup', async (req, res) => {
     try {
         await Admin.create({ username, password });
         
-        // Send welcome email to the admin
+    
         const subject = "Welcome to Dreamscape Realty (Admin)";
-        const message = getAdminSignupMessage(username);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to admin
+        const message = getAdminSignupMessage(username); 
+        await sendEmail(username, subject, message);  
 
         res.json({ msg: "Admin signup successful. Welcome email sent!" });
     } catch (error) {
