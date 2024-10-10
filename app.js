@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const adminRouter = require('./routes/admin');
 const userRouter = require('./routes/user');
 
-// Initialize Express
+// Initializing Express
 const app = express();
 const http = require('http').createServer(app);
 
@@ -15,10 +15,9 @@ app.use(bodyParser.json());
 app.use("/admin", adminRouter);
 app.use("/user", userRouter);
 
-// Start the server on port 3000
+
 http.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
 
-// Ensure this is properly exported
