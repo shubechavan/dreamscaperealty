@@ -21,7 +21,7 @@ Please feel free to explore your admin dashboard and start managing properties. 
 
 Once again, welcome aboard, and we look forward to your valuable contributions in helping Dreamscape Realty grow and thrive.
 
-Best regards,  
+Best Regards,  
 The Dreamscape Realty Team  
 www.dreamscaperealty.com  
 support@dreamscaperealty.com`;
