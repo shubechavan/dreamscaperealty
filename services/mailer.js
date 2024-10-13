@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();  // Loaded environment variables from .env
+require('dotenv').config();  
 
 const sendEmail = async (to, subject, text) => {
     try {
