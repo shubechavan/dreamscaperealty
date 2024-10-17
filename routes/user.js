@@ -4,7 +4,7 @@ const { User, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-const sendEmail = require('../services/mailer');  // Adjust the path as per your project structure
+const sendEmail = require('../services/mailer');  
 
 
 // User Routes
@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
         // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
         const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest Regards,\nThe Dreamscape Team`;
-        await sendEmail(username, subject, message);  // Send email to user
+        await sendEmail(username, subject, message);  
 
         res.json({ msg: "User signup successful. Welcome email sent!" });
     } catch (error) {
