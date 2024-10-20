@@ -6,6 +6,30 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const sendEmail = require('../services/mailer');  
 
+// Helper functions for email content
+const getSignupMessage = (username) => {
+    return `Dear ${username},
+
+Thank you for signing up to Dreamscape Realty. We're thrilled to have you with us! 
+Start exploring a wide variety of properties and find your dream home today.
+
+If you have any questions, feel free to reach out to our support team at support@dreamscaperealty.com.
+
+Best regards,
+The Dreamscape Team`;
+};
+
+const getPurchaseMessage = (username, PropertyId) => {
+    return `Dear ${username},
+
+Thank you for purchasing a property on Dreamscape Realty. Your property purchase (ID: ${PropertyId}) has been confirmed. 
+We wish you the best of luck with your new property, and we're here to assist you with anything you need.
+
+You can view your purchased properties in your dashboard.
+
+Best regards,
+The Dreamscape Team`;
+};
 
 // User Routes
 router.post('/signup', async (req, res) => {
@@ -15,8 +39,13 @@ router.post('/signup', async (req, res) => {
         
         // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
+<<<<<<< HEAD
         const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest Regards,\nThe Dreamscape Team`;
         await sendEmail(username, subject, message);  
+=======
+        const message = getSignupMessage(username);  // Use helper function to generate the message
+        await sendEmail(username, subject, message);  // Send email to user
+>>>>>>> b7c871b (Initial commit - added task master files)
 
         res.json({ msg: "User signup successful. Welcome email sent!" });
     } catch (error) {
@@ -69,7 +98,7 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
 
         // Send purchase confirmation email
         const subject = "Property Purchase Confirmation";
-        const message = `Dear ${username},\n\nThank you for purchasing a property on Dreamscape Realty. Your property purchase (ID: ${PropertyId}) is confirmed.\n\nBest,\nThe Dreamscape Team`;
+        const message = getPurchaseMessage(username, PropertyId);  // Use helper function to generate the message
         await sendEmail(username, subject, message);  // Send email to user
 
         res.json({ message: "Purchase complete! Confirmation email sent." });
