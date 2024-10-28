@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 // Database Connection
-mongoose.connect('mongodb+srv://shubhamchavancool332:0QKHGwWML4OVeCLH@cluster0.p96yv.mongodb.net/dreamscape_realty', {
+require('dotenv').config(); 
+mongoose.connect(process.env.MONGODB_URI, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
