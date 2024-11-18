@@ -8,7 +8,7 @@ function adminMiddleware(req, res, next) {
         return res.status(401).json({ msg: "No token provided" });
     }
 
-    const token = authHeader.split(' ')[1]; // Bearer <Token>
+    const token = authHeader.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ msg: "Invalid token format" });
@@ -16,7 +16,7 @@ function adminMiddleware(req, res, next) {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        req.admin = decoded; // Attach decoded token data to request
+        req.admin = decoded;
         next();
     } catch (error) {
         res.status(403).json({ msg: "Invalid or expired token" });
