@@ -8,9 +8,9 @@ const { JWT_SECRET } = require("../config");
 const sendEmail = require('../services/mailer');  
 
 =======
-const sendEmail = require('../services/mailer');  // Adjust the path as per your project structure
+const sendEmail = require('../services/mailer'); 
 
-// Helper function for email content
+
 >>>>>>> b7c871b (Initial commit - added task master files)
 const getAdminSignupMessage = (username) => {
     return `Dear ${username},
@@ -61,10 +61,9 @@ router.post('/signup', async (req, res) => {
         const message = getAdminSignupMessage(username); 
         await sendEmail(username, subject, message);  
 =======
-        // Send welcome email to the admin
         const subject = "Welcome to Dreamscape Realty (Admin)";
-        const message = getAdminSignupMessage(username);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to admin
+        const message = getAdminSignupMessage(username); 
+        await sendEmail(username, subject, message);
 >>>>>>> b7c871b (Initial commit - added task master files)
 
         res.json({ msg: "Admin signup successful. Welcome email sent!" });
@@ -93,10 +92,9 @@ router.post('/property', adminMiddleware, async (req, res) => {
     try {
         const property = await Property.create({ title, description, price, imagelink });
         
-        // Send notification email to admin
         const subject = "Property Created Successfully";
-        const message = getPropertyCreatedMessage(username, title);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to admin
+        const message = getPropertyCreatedMessage(username, title); 
+        await sendEmail(username, subject, message);  
         
         res.json({ msg: "Property created successfully", propertyId: property._id });
     } catch (error) {
