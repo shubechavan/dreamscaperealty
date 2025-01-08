@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const sendEmail = require('../services/mailer');  
 
-// Helper functions for email content
 const getSignupMessage = (username) => {
     return `Dear ${username},
 
