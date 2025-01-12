@@ -4,14 +4,14 @@ const { Admin, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-<<<<<<< HEAD
+
 const sendEmail = require('../services/mailer');  
 
-=======
+
 const sendEmail = require('../services/mailer'); 
 
 
->>>>>>> b7c871b (Initial commit - added task master files)
+
 const getAdminSignupMessage = (username) => {
     return `Dear ${username},
 
