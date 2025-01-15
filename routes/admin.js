@@ -1,115 +1,108 @@
 const express = require("express");
-const adminMiddleware = require('../middlewares/admin');
+const adminMiddleware = require("../middlewares/admin");
 const { Admin, Property } = require("../db");
-const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-<<<<<<< HEAD
-const sendEmail = require('../services/mailer');  
+const bcrypt = require("bcrypt");
+const sendEmail = require("../services/mailer");
 
-=======
-const sendEmail = require('../services/mailer');  // Adjust the path as per your project structure
+const router = express.Router();
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const cors = require("cors");
 
-// Helper function for email content
->>>>>>> b7c871b (Initial commit - added task master files)
-const getAdminSignupMessage = (username) => {
-    return `Dear ${username},
+// Helper functions
+const getAdminSignupMessage = (username) => `
+Dear ${username},
 
-We are delighted to welcome you to the Dreamscape Realty platform as an administrator. As part of your new role, you now have access to manage property listings, oversee transactions, and maintain the platform’s integrity. Your contributions are vital to the seamless functioning of our real estate system.
+We are delighted to welcome you to the Dreamscape Realty platform as an administrator. As part of your new role, you now have access to manage property listings, oversee transactions, and maintain the platform’s integrity.
 
-Below are some of the tasks you can manage as an admin:
-- Create, update, and delete property listings.
-- Monitor user activity and ensure a high-quality experience.
-- Review and approve listings before they go live.
-- Coordinate with other team members to ensure smooth operations.
-
-Please feel free to explore your admin dashboard and start managing properties. Should you need any assistance, do not hesitate to reach out to our support team at support@dreamscaperealty.com. We are always here to assist you.
-
-Once again, welcome aboard, and we look forward to your valuable contributions in helping Dreamscape Realty grow and thrive.
-
-<<<<<<< HEAD
-Best Regards,  
-=======
 Best regards,  
->>>>>>> b7c871b (Initial commit - added task master files)
 The Dreamscape Realty Team  
 www.dreamscaperealty.com  
 support@dreamscaperealty.com`;
-};
 
-
-const getPropertyCreatedMessage = (username, propertyTitle) => {
-    return `Dear ${username},
+const getPropertyCreatedMessage = (username, propertyTitle) => `
+Dear ${username},
 
 The property "${propertyTitle}" has been successfully added to Dreamscape Realty.
 
-Keep up the great work managing the listings!
-
-Best regards,
+Best regards,  
 The Dreamscape Team`;
-};
+
+// Rate Limiting for signup and signin routes
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: "Too many requests, please try again later.",
+});
+
+// Middleware
+router.use(helmet()); // Secure HTTP headers
+router.use(morgan("dev")); // Log HTTP requests
+router.use(cors()); // Enable cross-origin resource sharing
+router.use(limiter); // Apply rate limiting to the admin routes
 
 // Admin Routes
-router.post('/signup', async (req, res) => {
+router.post("/signup", async (req, res) => {
     const { username, password } = req.body;
     try {
-        await Admin.create({ username, password });
-        
-<<<<<<< HEAD
-    
-        const subject = "Welcome to Dreamscape Realty (Admin)";
-        const message = getAdminSignupMessage(username); 
-        await sendEmail(username, subject, message);  
-=======
-        // Send welcome email to the admin
-        const subject = "Welcome to Dreamscape Realty (Admin)";
-        const message = getAdminSignupMessage(username);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to admin
->>>>>>> b7c871b (Initial commit - added task master files)
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await Admin.create({ username, password: hashedPassword });
 
-        res.json({ msg: "Admin signup successful. Welcome email sent!" });
+        const subject = "Welcome to Dreamscape Realty (Admin)";
+        const message = getAdminSignupMessage(username);
+        await sendEmail(username, subject, message);
+
+        res.json({ success: true, msg: "Admin signup successful. Welcome email sent!" });
     } catch (error) {
-        res.status(500).json({ msg: "Error occurred during signup", error: error.message });
+        console.error("Signup Error:", error.message);
+        res.status(500).json({ success: false, msg: "Error during signup" });
     }
 });
 
-router.post('/signin', async (req, res) => {
+router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
-    const admin = await Admin.findOne({ username, password });
-    
-    if (admin) {
-        const token = jwt.sign({ username }, JWT_SECRET);
-        res.json({ token });
-    } else {
-        res.status(401).json({ msg: "Incorrect username or password" });
+    try {
+        const admin = await Admin.findOne({ username });
+        if (admin && (await bcrypt.compare(password, admin.password))) {
+            const token = jwt.sign({ username, adminId: admin._id }, JWT_SECRET);
+            res.json({ success: true, token });
+        } else {
+            res.status(401).json({ success: false, msg: "Incorrect username or password" });
+        }
+    } catch (error) {
+        console.error("Signin Error:", error.message);
+        res.status(500).json({ success: false, msg: "Error during signin" });
     }
 });
 
 // Property Routes
-router.post('/property', adminMiddleware, async (req, res) => {
+router.post("/property", adminMiddleware, async (req, res) => {
     const { title, description, price, imagelink } = req.body;
-    const username = req.headers.username;  // Assuming the admin's username is passed in headers
-
     try {
         const property = await Property.create({ title, description, price, imagelink });
-        
-        // Send notification email to admin
+
+        const username = req.admin.username; // From decoded token
         const subject = "Property Created Successfully";
-        const message = getPropertyCreatedMessage(username, title);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to admin
-        
-        res.json({ msg: "Property created successfully", propertyId: property._id });
+        const message = getPropertyCreatedMessage(username, title);
+        await sendEmail(username, subject, message);
+
+        res.json({ success: true, msg: "Property created successfully", propertyId: property._id });
     } catch (error) {
-        res.status(500).json({ msg: "Error creating property", error: error.message });
+        console.error("Property Creation Error:", error.message);
+        res.status(500).json({ success: false, msg: "Error creating property" });
     }
 });
 
-router.get('/property', adminMiddleware, async (req, res) => {
+router.get("/property", adminMiddleware, async (req, res) => {
     try {
         const properties = await Property.find({});
-        res.json({ properties });
+        res.json({ success: true, properties });
     } catch (error) {
-        res.status(500).json({ msg: "Error fetching properties", error: error.message });
+        console.error("Fetch Properties Error:", error.message);
+        res.status(500).json({ success: false, msg: "Error fetching properties" });
     }
 });
 

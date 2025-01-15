@@ -4,7 +4,11 @@ const { User, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-const sendEmail = require('../services/mailer');  
+const sendEmail = require('../services/mailer');
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const cors = require("cors");
 
 // Helper functions for email content
 const getSignupMessage = (username) => {
@@ -31,21 +35,33 @@ Best regards,
 The Dreamscape Team`;
 };
 
+// Rate Limiting for signup and signin routes
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: "Too many requests, please try again later.",
+});
+
+// Middleware
+router.use(helmet()); // Secure HTTP headers
+router.use(morgan("dev")); // Log HTTP requests
+router.use(cors()); // Enable cross-origin resource sharing
+router.use(limiter); // Apply rate limiting to the user routes
+
 // User Routes
+router.get('/user/dashboard', userMiddleware, (req, res) => {
+    res.json({ success: true, msg: "Welcome User!", username: req.username });
+});
+
 router.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
         await User.create({ username, password });
-        
+
         // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
-<<<<<<< HEAD
-        const message = `Dear ${username},\n\nThank you for signing up to Dreamscape Realty.\nWe're excited to have you onboard!\n\nBest Regards,\nThe Dreamscape Team`;
-        await sendEmail(username, subject, message);  
-=======
-        const message = getSignupMessage(username);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to user
->>>>>>> b7c871b (Initial commit - added task master files)
+        const message = getSignupMessage(username);
+        await sendEmail(username, subject, message); // Send email to user
 
         res.json({ msg: "User signup successful. Welcome email sent!" });
     } catch (error) {
@@ -103,7 +119,7 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
 
         res.json({ message: "Purchase complete! Confirmation email sent." });
     } catch (error) {
-        res.status(500).json({ msg: "Error occur during property purchase", error: error.message });
+        res.status(500).json({ msg: "Error during property purchase", error: error.message });
     }
 });
 
