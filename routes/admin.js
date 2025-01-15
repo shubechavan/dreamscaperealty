@@ -12,7 +12,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 
-// Helper functions
 const getAdminSignupMessage = (username) => `
 Dear ${username},
 
@@ -31,20 +30,17 @@ The property "${propertyTitle}" has been successfully added to Dreamscape Realty
 Best regards,  
 The Dreamscape Team`;
 
-// Rate Limiting for signup and signin routes
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per window
   message: "Too many requests, please try again later.",
 });
 
-// Middleware
-router.use(helmet()); // Secure HTTP headers
-router.use(morgan("dev")); // Log HTTP requests
-router.use(cors()); // Enable cross-origin resource sharing
-router.use(limiter); // Apply rate limiting to the admin routes
+router.use(helmet()); 
+router.use(morgan("dev"));
+router.use(cors());
+router.use(limiter); 
 
-// Admin Routes
 router.post("/signup", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -78,7 +74,6 @@ router.post("/signin", async (req, res) => {
     }
 });
 
-// Property Routes
 router.post("/property", adminMiddleware, async (req, res) => {
     const { title, description, price, imagelink } = req.body;
     try {
