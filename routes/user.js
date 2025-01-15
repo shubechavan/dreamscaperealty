@@ -10,7 +10,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 
-// Helper functions for email content
 const getSignupMessage = (username) => {
     return `Dear ${username},
 
