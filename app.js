@@ -7,16 +7,14 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const adminRouter = require('./routes/admin');
 const userRouter = require('./routes/user');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config(); 
 
-// Initializing Express app
 const app = express();
 
-// Middleware
 app.use(bodyParser.json());
-app.use(cors());  // Enable Cross-Origin Requests
-app.use(helmet());  // Set various HTTP headers for security
-app.use(morgan('dev'));  // Log HTTP requests
+app.use(cors());
+app.use(helmet());
+app.use(morgan('dev')); 
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000,  // 15 minutes
     max: 100,  // Limit to 100 requests per window
