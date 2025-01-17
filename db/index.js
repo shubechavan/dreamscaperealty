@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config(); 
 
-// Database Connection
 const connectWithRetry = () => {
     mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
@@ -18,10 +17,8 @@ const connectWithRetry = () => {
 };
 connectWithRetry();
 
-// Schema options for timestamps
 const SchemaOptions = { timestamps: true };
 
-// Define schemas
 const Schema = mongoose.Schema;
 
 const AdminSchema = new Schema({
@@ -68,12 +65,10 @@ const propertySchema = new mongoose.Schema({ title: { type: String, required: tr
     SchemaOptions);
 
 
-// Create models
 const Admin = mongoose.model('Admin', AdminSchema);
 const User = mongoose.model('User', UserSchema);
 const Property = mongoose.model('Property', PropertySchema);
 
-// Export models and connection
 module.exports = {
     Admin,
     User,
