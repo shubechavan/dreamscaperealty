@@ -34,14 +34,12 @@ Best regards,
 The Dreamscape Team`;
 };
 
-// Rate Limiting for signup and signin routes
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
+  max: 100, 
   message: "Too many requests, please try again later.",
 });
 
-// Middleware
 router.use(helmet()); // Secure HTTP headers
 router.use(morgan("dev")); // Log HTTP requests
 router.use(cors()); // Enable cross-origin resource sharing
@@ -57,7 +55,6 @@ router.post('/signup', async (req, res) => {
     try {
         await User.create({ username, password });
 
-        // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
         const message = getSignupMessage(username);
         await sendEmail(username, subject, message); // Send email to user
@@ -80,7 +77,6 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-// Fetch all properties
 router.get('/property', userMiddleware, async (req, res) => {
     try {
         const properties = await Property.find({});
@@ -90,7 +86,6 @@ router.get('/property', userMiddleware, async (req, res) => {
     }
 });
 
-// Purchase a property
 router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
     const PropertyId = req.params.PropertyId;
     const username = req.headers.username;
@@ -105,16 +100,14 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
             return res.status(400).json({ msg: "Property already purchased" });
         }
 
-        // Add property to user's purchasedProperties
         await User.updateOne(
             { username },
             { "$push": { purchasedProperties: PropertyId } }
         );
 
-        // Send purchase confirmation email
         const subject = "Property Purchase Confirmation";
-        const message = getPurchaseMessage(username, PropertyId);  // Use helper function to generate the message
-        await sendEmail(username, subject, message);  // Send email to user
+        const message = getPurchaseMessage(username, PropertyId);
+        await sendEmail(username, subject, message);  
 
         res.json({ message: "Purchase complete! Confirmation email sent." });
     } catch (error) {
