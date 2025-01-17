@@ -52,12 +52,21 @@ UserSchema.pre('save', async function (next) {
     next();
 });
 
-const PropertySchema = new Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
-    imagelink: { type: String }
-}, SchemaOptions);
+const propertySchema = new mongoose.Schema({ title: { type: String, required: true },
+     description: { type: String, required: true }, 
+     price: { type: Number, required: true }, 
+     address: { type: String, required: true },
+     city: { type: String, required: true }, 
+     country: { type: String, required: true },
+     image: { type: String, required: true }, 
+     facilities: { bathrooms: { type: String, required: true },
+     parking: { type: String, required: true },
+     bedrooms: { type: String, required: true } },
+     userEmail: { type: String, required: true }, 
+     createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now } },
+    SchemaOptions);
+
 
 // Create models
 const Admin = mongoose.model('Admin', AdminSchema);

@@ -42,10 +42,10 @@ const limiter = rateLimit({
 });
 
 // Middleware
-router.use(helmet()); // Secure HTTP headers
-router.use(morgan("dev")); // Log HTTP requests
-router.use(cors()); // Enable cross-origin resource sharing
-router.use(limiter); // Apply rate limiting to the user routes
+router.use(helmet());
+router.use(morgan("dev"));
+router.use(cors()); 
+router.use(limiter); 
 
 // User Routes
 router.get('/user/dashboard', userMiddleware, (req, res) => {
@@ -57,7 +57,6 @@ router.post('/signup', async (req, res) => {
     try {
         await User.create({ username, password });
 
-        // Send welcome email
         const subject = "Welcome to Dreamscape Realty!";
         const message = getSignupMessage(username);
         await sendEmail(username, subject, message); // Send email to user
