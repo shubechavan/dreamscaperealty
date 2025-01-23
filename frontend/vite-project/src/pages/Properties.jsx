@@ -75,7 +75,7 @@ function Properties() {
   )
 }
 
-export default Properties*/
+export default Properties
 /*
  
 import { useState, useEffect } from "react"
