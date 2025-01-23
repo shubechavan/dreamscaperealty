@@ -1,6 +1,6 @@
-/*import { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-
+import React from "react"
 function Properties() {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(true)
@@ -77,7 +77,7 @@ function Properties() {
 
 export default Properties*/
 /*
- */
+ 
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import React from "react"
@@ -161,3 +161,4 @@ function Properties() {
 
 export default Properties
 
+*/
