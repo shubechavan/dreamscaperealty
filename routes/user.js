@@ -3,13 +3,13 @@ const userMiddleware = require("../middlewares/user");
 const { User, Property } = require("../db");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
+const { JWT_SECRET } = require("/Dreamscape reality/config");
 const sendEmail = require('../services/mailer');
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
-
+const bcrypt = require('bcrypt');
 const getSignupMessage = (username) => {
     return `Dear ${username},
 
@@ -40,18 +40,15 @@ const limiter = rateLimit({
   message: "Too many requests, please try again later.",
 });
 
-<<<<<<< HEAD
 // Middleware
 router.use(helmet());
 router.use(morgan("dev"));
 router.use(cors()); 
 router.use(limiter); 
-=======
 router.use(helmet()); // Secure HTTP headers
 router.use(morgan("dev")); // Log HTTP requests
 router.use(cors()); // Enable cross-origin resource sharing
 router.use(limiter); // Apply rate limiting to the user routes
->>>>>>> 126bba5f085ccae1c7f37bc16af97261d05314f4
 
 // User Routes
 router.get('/user/dashboard', userMiddleware, (req, res) => {
@@ -59,31 +56,90 @@ router.get('/user/dashboard', userMiddleware, (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
+
+    if (!username || !email || !password || !confirmPassword) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (!email || !email.includes('@')) {
+        return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: "Passwords do not match" });
+    }
+
     try {
-        await User.create({ username, password });
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) {
+            return res.status(409).json({ message: "Email or Username is already registered" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await User.create({
+            username,
+            email,
+            password: hashedPassword,
+        });
 
         const subject = "Welcome to Dreamscape Realty!";
         const message = getSignupMessage(username);
-        await sendEmail(username, subject, message); // Send email to user
 
-        res.json({ msg: "User signup successful. Welcome email sent!" });
+        if (email) {
+            await sendEmail(email, subject, message);
+        }
+
+        res.status(201).json({ message: "User signup successful. Welcome email sent!" });
     } catch (error) {
-        res.status(500).json({ msg: "Error during signup", error: error.message });
+        console.error("Error during signup:", error);
+        res.status(500).json({ message: "An internal server error occurred", error: error.message });
     }
 });
+
+
 
 router.post('/signin', async (req, res) => {
     const { username, password } = req.body;
-    const user = await User.findOne({ username, password });
 
-    if (user) {
-        const token = jwt.sign({ username }, JWT_SECRET);
+    try {
+        console.log("Received signin request:", { username, password }); // Debug log
+
+        // Find the user by username
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            console.log("User not found"); // Debug log
+            return res.status(401).json({ msg: "Incorrect username or password" });
+        }
+
+        console.log("User found:", user); // Debug log
+
+        // Compare the hashed password with the plain-text password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            console.log("Invalid password"); // Debug log
+
+            // OPTIONAL: Debugging step to manually hash `password` and log the result
+            const hashedTestPassword = await bcrypt.hash(password, 10);
+            console.log("Provided password hashed for comparison:", hashedTestPassword);
+
+            return res.status(401).json({ msg: "Incorrect username or password" });
+        }
+
+        // Generate a JWT token
+        const token = jwt.sign({ username }, "SHUBHAM_SERVER", { expiresIn: '1h' });
+        console.log("Token generated:", token); // Debug log
+
         res.json({ token });
-    } else {
-        res.status(401).json({ msg: "Incorrect username or password" });
+    } catch (error) {
+        console.error("Error during signin:", error);
+        res.status(500).json({ msg: "An internal server error occurred", error: error.message });
     }
 });
+
 
 router.get('/property', userMiddleware, async (req, res) => {
     try {
@@ -94,6 +150,18 @@ router.get('/property', userMiddleware, async (req, res) => {
     }
 });
 
+/*router.get("/property", userMiddleware, async (req, res) => {
+    try {
+      const jsonPath = path.join(__dirname, "..", "residency.json")
+      const jsonData = await fs.readFile(jsonPath, "utf8")
+      const properties = JSON.parse(jsonData)
+      res.json({ properties })
+    } catch (error) {
+      console.error("Error reading residency.json:", error)
+      res.status(500).json({ msg: "Error fetching properties", error: error.message })
+    }
+  })*/
+  
 router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
     const PropertyId = req.params.PropertyId;
     const username = req.headers.username;
@@ -123,7 +191,6 @@ router.post('/property/:PropertyId', userMiddleware, async (req, res) => {
     }
 });
 
-// Fetch purchased properties
 router.get('/purchased-property', userMiddleware, async (req, res) => {
     try {
         const user = await User.findOne({ username: req.headers.username });
@@ -132,7 +199,6 @@ router.get('/purchased-property', userMiddleware, async (req, res) => {
             return res.status(404).json({ msg: "User not found" });
         }
 
-        // Fetch the properties using the purchasedProperties array
         const properties = await Property.find({
             _id: { $in: user.purchasedProperties }
         });

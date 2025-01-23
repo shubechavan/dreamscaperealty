@@ -35,13 +35,13 @@ AdminSchema.pre('save', async function (next) {
 
 const UserSchema = new Schema({
     username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true }, // Added email field with uniqueness constraint
     password: { type: String, required: true },
     purchasedProperties: [{
         type: Schema.Types.ObjectId,
         ref: 'Property'
     }]
 }, SchemaOptions);
-
 UserSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 10);
@@ -67,7 +67,7 @@ const propertySchema = new mongoose.Schema({ title: { type: String, required: tr
 
 const Admin = mongoose.model('Admin', AdminSchema);
 const User = mongoose.model('User', UserSchema);
-const Property = mongoose.model('Property', PropertySchema);
+const Property = mongoose.model('Property', propertySchema);
 
 module.exports = {
     Admin,
