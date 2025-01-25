@@ -141,7 +141,7 @@ router.post('/signin', async (req, res) => {
 });
 
 
-router.get('/property', userMiddleware, async (req, res) => {
+router.get('/property', async (req, res) => {
     try {
         const properties = await Property.find({});
         res.json({ properties });
@@ -208,5 +208,43 @@ router.get('/purchased-property', userMiddleware, async (req, res) => {
         res.status(500).json({ msg: "Error fetching purchased properties", error: error.message });
     }
 });
+router.post('/contact-us', async (req, res) => {
+    const { name, email, message } = req.body;
+
+    // Validate input
+    if (!name || !email || !message) {
+        return res.status(400).json({ msg: "All fields are required" });
+    }
+
+    if (!email.includes('@')) {
+        return res.status(400).json({ msg: "Invalid email format" });
+    }
+
+    try {
+        // Compose the email details
+        const subject = "New Contact Us Message";
+        const emailContent = `
+        Dear Shubham,
+
+        You have received a new message from Dreamscape Realty's Contact Us form:
+
+        Name: ${name}
+        Email: ${email}
+        Message: ${message}
+
+        Best regards,
+        Dreamscape Realty System
+        `;
+
+        // Send the email to your Gmail
+        await sendEmail("thedreamscaperealtyrealestate@gmail.com", subject, emailContent);
+
+        res.status(200).json({ msg: "Your message has been sent successfully. We'll get back to you soon!" });
+    } catch (error) {
+        console.error("Error sending contact-us email:", error);
+        res.status(500).json({ msg: "An error occurred while sending your message. Please try again later." });
+    }
+});
+
 
 module.exports = router;

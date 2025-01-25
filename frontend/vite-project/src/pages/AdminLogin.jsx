@@ -2,13 +2,11 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
 
-function AdminRegister() {
+function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    adminCode: "",
   })
   const navigate = useNavigate()
 
@@ -23,7 +21,7 @@ function AdminRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch("/api/admin/register", {
+      const response = await fetch("/api/admin/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,11 +29,12 @@ function AdminRegister() {
         body: JSON.stringify(formData),
       })
       const data = await response.json()
-      if (response.ok) {
-        navigate("/admin/login")
+      if (data.token) {
+        localStorage.setItem("adminToken", data.token)
+        navigate("/admin/dashboard")
       }
     } catch (error) {
-      console.error("Registration error:", error)
+      console.error("Login error:", error)
     }
   }
 
@@ -45,8 +44,8 @@ function AdminRegister() {
         <Link to="/" className="text-gray-600 hover:text-gray-900">
           ← BACK
         </Link>
-        <Link to="/admin/login" className="text-gray-600 hover:text-gray-900">
-          LOG IN
+        <Link to="/admin/register" className="text-gray-600 hover:text-gray-900">
+          CREATE ADMIN ACCOUNT
         </Link>
       </div>
 
@@ -59,26 +58,10 @@ function AdminRegister() {
           />
         </div>
 
-        <h1 className="text-2xl font-semibold text-center mb-8">Create Admin Account - Dreamscape Realty</h1>
+        <h1 className="text-2xl font-semibold text-center mb-8">Admin Login - Dreamscape Realty</h1>
 
         <div className="max-w-[400px] mx-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm uppercase mb-2" htmlFor="name">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full p-2 border-b border-gray-300 focus:border-gray-900 outline-none"
-                placeholder="Enter your full name"
-                required
-              />
-            </div>
-
             <div>
               <label className="block text-sm uppercase mb-2" htmlFor="email">
                 Email Address
@@ -107,7 +90,7 @@ function AdminRegister() {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full p-2 border-b border-gray-300 focus:border-gray-900 outline-none"
-                  placeholder="Create a password"
+                  placeholder="Enter your password"
                   required
                 />
                 <button
@@ -120,40 +103,29 @@ function AdminRegister() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm uppercase mb-2" htmlFor="adminCode">
-                Admin Registration Code
-              </label>
-              <input
-                type="text"
-                id="adminCode"
-                name="adminCode"
-                value={formData.adminCode}
-                onChange={handleChange}
-                className="w-full p-2 border-b border-gray-300 focus:border-gray-900 outline-none"
-                placeholder="Enter admin registration code"
-                required
-              />
-            </div>
-
             <button
               type="submit"
               className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-700 transition-colors"
             >
-              CREATE ADMIN ACCOUNT
+              LOG IN AS ADMIN
             </button>
           </form>
 
-          <div className="text-center mt-8 text-sm text-gray-500">
-            By creating an admin account, you agree to our
-            <div className="space-x-2">
-              <a href="/terms" className="text-blue-600 hover:underline">
-                Terms of Service
-              </a>
-              <span>&</span>
-              <a href="/privacy" className="text-blue-600 hover:underline">
-                Privacy Policy
-              </a>
+          <div className="text-center mt-8">
+            <Link to="/admin/forgot-password" className="text-blue-600 hover:underline">
+              CAN'T LOG IN?
+            </Link>
+            <div className="mt-4 text-sm text-gray-500">
+              Secure Admin Login with reCAPTCHA subject to Google
+              <div className="space-x-2">
+                <a href="/terms" className="text-blue-600 hover:underline">
+                  Terms
+                </a>
+                <span>&</span>
+                <a href="/privacy" className="text-blue-600 hover:underline">
+                  Privacy
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -162,5 +134,5 @@ function AdminRegister() {
   )
 }
 
-export default AdminRegister
+export default AdminLogin
 

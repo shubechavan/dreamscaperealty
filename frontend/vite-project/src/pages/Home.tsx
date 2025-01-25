@@ -1,41 +1,156 @@
+import { useState } from "react"
+import { Search } from "lucide-react"
 import { Link } from "react-router-dom"
 import React from "react"
 function Home() {
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    // Implement search functionality
+    console.log("Searching for:", searchQuery)
+  }
+
   return (
-    <div>
-      <section className="p-12 text-center bg-gradient-to-r from-blue-200 to-purple-500 lg:p-56">
-        <h1 className="mb-2 text-2xl font-bold text-gray-700 lg:text-5xl">Find Your Dream Home</h1>
-        <p className="mb-8 text-lg text-center text-gray-700">
-        Discover a wide variety of properties that suit your style and budget. Whether you're looking for a cozy apartment or a luxurious family home, we've got something for everyone. Explore our listings and find the perfect place to call home today.
-        </p>
-        <div className="flex items-center justify-center space-x-2">
-          <Link
-            to="/properties"
-            className="px-2 py-2 text-gray-800 text-gray-900 bg-gray-300 border rounded rounded-lg lg:px-8 lg:py-3 hover:bg-gray-200 hover:shadow"
-          >
-            View Properties
-          </Link>
-          <Link
-            to="/contact"
-            className="px-4 py-2 text-yellow-900 transition duration-300 bg-yellow-400 border border-gray-600 rounded-lg lg:px-8 lg:py-3 hover:bg-yellow-300 hover:shadow-xl"
-          >
-            Contact Us
-          </Link>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <div className="relative h-[700px]">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              'url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-01-25%20at%2014.54.28_095000ee.jpg-5n0LW6zSKBWevRaBoe6pZPbaYulRYc.jpeg")',
+            backgroundBlendMode: "overlay",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+          }}
+        />
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-white">
+          <h1 className="text-4xl md:text-6xl font-bold mb-8 text-center">
+            Agents. Tours.
+            <br />
+            Loans. Homes.
+          </h1>
+
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="w-full max-w-3xl">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Enter an address, neighborhood, city, or ZIP code"
+                className="w-full px-6 py-4 text-lg text-gray-900 rounded-lg shadow-lg"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <Search className="w-6 h-6" />
+              </button>
+            </div>
+          </form>
         </div>
-      </section>
-      <div className="text-center">
-        {/* <h1 className="text-4xl font-bold mb-4">Welcome to Dreamscape Realty</h1>
-      <p className="text-xl mb-8">Find your dream home today!</p> */}
-        <div className="space-x-4">
-          {/* <Link to="/properties" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          View Properties
-        </Link> */}
-         {/* <Link to="/user/login" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-            User Login
-          </Link>
-          <Link to="/admin/login" className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-            Admin Login
-          </Link> */}
+      </div>
+
+      {/* Recommendations Section */}
+      <div className="bg-gray-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-semibold mb-4">Get home recommendations</h2>
+            <p className="text-gray-600 mb-4">Sign in for a more personalized experience.</p>
+            <Link
+              to="/user/login"
+              className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="py-16 px-4">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Buy a home */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="w-24 h-24 mb-6 mx-auto">
+                <img
+                  src="/placeholder.svg?height=96&width=96"
+                  alt="Buy a home"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center mb-4">Buy a home</h3>
+              <p className="text-gray-600 text-center mb-6">
+                Find your place with an immersive photo experience and the most listings, including things you won't
+                find anywhere else.
+              </p>
+              <Link
+                to="/properties"
+                className="block text-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Browse homes
+              </Link>
+            </div>
+
+            {/* Sell a home */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="w-24 h-24 mb-6 mx-auto">
+                <img
+                  src="/placeholder.svg?height=96&width=96"
+                  alt="Sell a home"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center mb-4">Sell a home</h3>
+              <p className="text-gray-600 text-center mb-6">
+                No matter what path you take to sell your home, we can help you navigate a successful sale.
+              </p>
+              <Link
+                to="/sell"
+                className="block text-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                See your options
+              </Link>
+            </div>
+
+            {/* Rent a home */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="w-24 h-24 mb-6 mx-auto">
+                <img
+                  src="/placeholder.svg?height=96&width=96"
+                  alt="Rent a home"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center mb-4">Rent a home</h3>
+              <p className="text-gray-600 text-center mb-6">
+                We're creating a seamless online experience – from shopping on the largest rental network, to applying,
+                to paying rent.
+              </p>
+              <Link
+                to="/rentals"
+                className="block text-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Find rentals
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* About Section */}
+      <div className="bg-gray-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-2xl font-semibold mb-4">About Dreamscape's Recommendations</h2>
+            <p className="text-gray-600">
+              Recommendations are based on your location and search activity, such as the homes you've viewed and saved
+              and the filters you've set. We use this information to bring better homes to your attention, so you don't
+              miss out.
+            </p>
+          </div>
         </div>
       </div>
     </div>
