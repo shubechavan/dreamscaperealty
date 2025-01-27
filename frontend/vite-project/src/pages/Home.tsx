@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Search } from "lucide-react"
 import { Link } from "react-router-dom"
 import React from "react"
+
 function Home() {
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -74,11 +75,11 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Buy a home */}
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <div className="w-24 h-24 mb-6 mx-auto">
+              <div className="w-32 h-32 mb-6 mx-auto">
                 <img
-                  src="/placeholder.svg?height=96&width=96"
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Z3VMXvnobhhiBL6uzb2GuEGgYNfTCR.png"
                   alt="Buy a home"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
               <h3 className="text-xl font-semibold text-center mb-4">Buy a home</h3>
@@ -96,11 +97,11 @@ function Home() {
 
             {/* Sell a home */}
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <div className="w-24 h-24 mb-6 mx-auto">
+              <div className="w-32 h-32 mb-6 mx-auto">
                 <img
-                  src="/placeholder.svg?height=96&width=96"
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Ir9eYQ3b4rJ6lTYjPkmd07qOFgrciQ.png"
                   alt="Sell a home"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
               <h3 className="text-xl font-semibold text-center mb-4">Sell a home</h3>
@@ -117,11 +118,11 @@ function Home() {
 
             {/* Rent a home */}
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <div className="w-24 h-24 mb-6 mx-auto">
+              <div className="w-32 h-32 mb-6 mx-auto">
                 <img
-                  src="/placeholder.svg?height=96&width=96"
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-xKOv5Nwec7PV3anscoFE88sEIkTFVC.png"
                   alt="Rent a home"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
               <h3 className="text-xl font-semibold text-center mb-4">Rent a home</h3>

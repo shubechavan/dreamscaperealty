@@ -115,19 +115,11 @@ function UserLogin() {
           </div>
 
           {/* Right Column - Social Login */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="text-center text-sm text-gray-500 mb-4">OR</div>
-            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
+            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 p-3 rounded-lg bg-white hover:bg-gray-100 transition-all shadow-sm">
               <img src="https://www.google.com/favicon.ico" alt="" className="w-5 h-5" />
               Continue with Google
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
-              <img src="https://www.apple.com/favicon.ico" alt="" className="w-5 h-5" />
-              Continue with Apple
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
-              <img src="https://www.facebook.com/favicon.ico" alt="" className="w-5 h-5" />
-              Continue with Facebook
             </button>
           </div>
         </div>

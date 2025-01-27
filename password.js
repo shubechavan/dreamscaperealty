@@ -1,26 +1,12 @@
 const bcrypt = require('bcrypt');
-const { User } = require('./db/index'); // Adjust the path to your User model
 
-async function updatePassword(username, newPassword) {
-    try {
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        console.log("New hashed password:", hashedPassword);
+const plainTextPassword = "password456"; // Replace with the login password you are testing
+const hashedPassword = "$2b$10$ApqqxRI9R9MeGIegyXzP5.D.zJJbgHFVygMcEUhq7dRTONA4h8LWq"; // Replace with the stored password
 
-        const user = await User.findOneAndUpdate(
-            { username },
-            { password: hashedPassword },
-            { new: true }
-        );
-
-        if (user) {
-            console.log("Password updated successfully for:", username);
-        } else {
-            console.log("User not found.");
-        }
-    } catch (error) {
-        console.error("Error updating password:", error);
+bcrypt.compare(plainTextPassword, hashedPassword, (err, result) => {
+    if (err) {
+        console.error("Bcrypt Error:", err);
+    } else {
+        console.log("Password matches:", result); // Should print true or false
     }
-}
-
-// Call this function with the correct username and new password
-updatePassword('jane22doe', 'password456');
+});

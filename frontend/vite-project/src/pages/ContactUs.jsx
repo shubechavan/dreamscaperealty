@@ -55,39 +55,25 @@ function ContactUs() {
         <div className="relative z-10 p-8 md:p-16 h-full flex flex-col bg-white bg-opacity-15">
           <div className="flex-grow">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Have a Project
               <br />
-              in mind?
             </h1>
             <p className="text-xl mb-12 text-gray-600">
-              Reach out to us. We can make
               <br />
-              something awesome together.
             </p>
 
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <MapPin className="w-6 h-6 text-gray-900 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">ADDRESS</h3>
-                  <p className="text-gray-600">123 Dreamscape Avenue, Suite 100</p>
-                  <p className="text-gray-600">New York, NY 10001</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <Mail className="w-6 h-6 text-gray-900 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">EMAIL</h3>
-                  <p className="text-gray-600">contact@dreamscaperealty.com</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <Phone className="w-6 h-6 text-gray-900 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">PHONE</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
                 </div>
               </div>
             </div>

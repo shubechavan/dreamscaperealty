@@ -15,7 +15,7 @@ function Header() {
               alt="Dreamscape Realty Logo"
               className="h-20 w-auto"
             />
-            <span className="text-2xl font-semibold text-gray-800">𝓓𝓻𝓮𝓪𝓶𝓼𝓬𝓪𝓹𝓮 𝓡𝓮𝓪𝓁𝓉𝔂</span>
+            <span className="text-2xl font-semibold text-gray-800">Dreamscape Realty</span>
           </Link>
           <button
             type="button"
@@ -25,7 +25,7 @@ function Header() {
             <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
               <path
                 fillRule="evenodd"
-                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"
               ></path>
             </svg>
           </button>
@@ -44,11 +44,14 @@ function Header() {
           <div className="flex flex-col md:flex-row md:space-x-4 mt-4 md:mt-0">
             <Link
               to="/user/login"
-              className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 text-center mb-2 md:mb-0"
+              className="block mt-4 text-gray-800 hover:text-blue-600 md:inline-block md:mt-0"
             >
               User Login
             </Link>
-            <Link to="/admin/login" className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 text-center">
+            <Link
+              to="/admin/login"
+              className="block mt-4 text-gray-800 hover:text-blue-600 md:inline-block md:mt-0"
+            >
               Admin Login
             </Link>
           </div>
