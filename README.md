@@ -1,6 +1,6 @@
 # Dreamscape Realty
 
-A responsive real estate website that allows users to browse, purchase, and manage properties with an admin portal for property management. The project is built using **Node.js**, **Express**, **MongoDB**, and **JWT** authentication and features CRUD operations for properties.
+A responsive real estate website that allows users to browse, purchase, and manage properties with an admin portal for property management. The project is built using **Node.js**, **Express**, **MongoDB**, **JWT** authentication, and **ReactJS** for the frontend. It features CRUD operations for properties, a responsive design, and user/admin authentication.
 
 ## Table of Contents
 
@@ -16,21 +16,24 @@ A responsive real estate website that allows users to browse, purchase, and mana
 
 ## Features
 
-- **Browse Properties**: Users can view available properties.
+- **Browse Properties**: Users can view available properties with a user-friendly interface.
 - **User Authentication**: Secure signup and login using JWT.
 - **Purchase Properties**: Users can express interest in or purchase properties.
 - **Admin Dashboard**: Admins can add, update, and delete property listings.
-- **Mobile Friendly**: Fully responsive UI designed for mobile and desktop views.
+- **Responsive UI**: Fully responsive design for mobile and desktop views.
+- **Property Management**: Admins can view, add, update, and delete properties via an admin portal.
 
 ## Technologies
 
-- **Frontend**: HTML, CSS, ReactJS (if applicable)
+- **Frontend**: ReactJS, Tailwind CSS, Axios (for API calls)
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Authentication**: JWT (JSON Web Token)
-- **Other**: Tailwind CSS, Mongoose ORM
+- **Other**: Mongoose ORM, Nodemailer (for email notifications)
 
 ## Installation
+
+### Backend Setup
 
 1. Clone the repository:
    ```bash
@@ -42,7 +45,7 @@ A responsive real estate website that allows users to browse, purchase, and mana
    cd Dreamscaperealestate
    ```
 
-3. Install the dependencies:
+3. Install the backend dependencies:
    ```bash
    npm install
    ```
@@ -65,16 +68,47 @@ A responsive real estate website that allows users to browse, purchase, and mana
    npm start
    ```
 
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install the frontend dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the frontend:
+   ```bash
+   npm start
+   ```
+
+- The frontend will be available at: `http://localhost:3000`.
+
+### Running Both Frontend and Backend Together
+
+For development purposes, you can run both the frontend and backend at the same time by running:
+
+- In one terminal, run the backend server:
+  ```bash
+  npm start
+  ```
+
+- In another terminal, run the frontend:
+  ```bash
+  npm start
+  ```
+
+The application will be accessible at `http://localhost:3000`.
+
 ## Usage
 
 You can use **Postman** or any API client to interact with the API.
 
-For development:
-- Run the server:
-  ```bash
-  npm run dev
-  ```
-- Access the application at: `http://localhost:3000`
+- The backend API is available at: `http://localhost:5000`
+- The frontend is available at: `http://localhost:3000`
 
 ## API Endpoints
 
@@ -132,12 +166,6 @@ The application expects the following environment variables in the `.env` file:
 - **Payment Integration**: Implement payment gateway for property purchases.
 - **User Notifications**: Implement email notifications for property purchase confirmations.
 
----
 
-### Instructions for updating:
-
-1. **Customize the environment variables section** with your specific configuration.
-2. **Ensure all features and enhancements** accurately reflect your project.
-3. **Push changes to GitHub** once you've updated your local README:
 
 
