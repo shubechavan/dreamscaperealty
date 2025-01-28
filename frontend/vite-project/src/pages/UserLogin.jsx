@@ -1,13 +1,15 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
-import React from "react"
+import axios from "axios"
+
 function UserLogin() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
+  const [error, setError] = useState("")
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -20,21 +22,17 @@ function UserLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError("")
     try {
-      const response = await fetch("/api/user/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-      const data = await response.json()
-      if (data.token) {
-        localStorage.setItem("userToken", data.token)
+      const response = await axios.post("/api/user/signin", formData)
+      if (response.data.token) {
+        localStorage.setItem("userToken", response.data.token)
+        localStorage.setItem("userEmail", formData.email)
         navigate("/user/dashboard")
       }
     } catch (error) {
       console.error("Login error:", error)
+      setError(error.response?.data?.msg || "An error occurred during login")
     }
   }
 
@@ -52,7 +50,7 @@ function UserLogin() {
       <div className="max-w-[1000px] mx-auto px-4 py-8">
         <div className="flex justify-center mb-8">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp_Image_2024-07-14_at_14.48.13_6a45f127-removebg-gJJvyU2V484RGIQT5DEYeT3E7HwC4O.png"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-X2Fm5RA5MqKBdCkbbLYn0bWtCeekD0.png"
             alt="Dreamscape Realty Logo"
             className="h-20 w-auto"
           />
@@ -105,6 +103,8 @@ function UserLogin() {
                 </div>
               </div>
 
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+
               <button
                 type="submit"
                 className="w-full bg-gray-100 text-gray-900 py-3 rounded hover:bg-gray-200 transition-colors"
@@ -115,11 +115,19 @@ function UserLogin() {
           </div>
 
           {/* Right Column - Social Login */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="text-center text-sm text-gray-500 mb-4">OR</div>
-            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 p-3 rounded-lg bg-white hover:bg-gray-100 transition-all shadow-sm">
+            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
               <img src="https://www.google.com/favicon.ico" alt="" className="w-5 h-5" />
               Continue with Google
+            </button>
+            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
+              <img src="https://www.apple.com/favicon.ico" alt="" className="w-5 h-5" />
+              Continue with Apple
+            </button>
+            <button className="w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded hover:bg-gray-50">
+              <img src="https://www.facebook.com/favicon.ico" alt="" className="w-5 h-5" />
+              Continue with Facebook
             </button>
           </div>
         </div>

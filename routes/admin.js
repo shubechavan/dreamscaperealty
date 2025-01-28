@@ -58,47 +58,47 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+// Update the signin route
 router.post("/signin", async (req, res) => {
-    const { username, password } = req.body;
-
+    const { email, password } = req.body
+  
     try {
-        // Trim the inputs to avoid accidental whitespaces
-        const trimmedUsername = username.trim();
-        const trimmedPassword = password.trim();
-
-        // Find admin by username
-        const admin = await Admin.findOne({ username: trimmedUsername });
-
-        // If admin is not found
-        if (!admin) {
-            console.log("Admin not found for username:", trimmedUsername);
-            return res.status(401).json({ success: false, msg: "Incorrect username or password" });
-        }
-
-        console.log("Admin found:", admin);
-
-        // Compare passwords
-        const isMatch = await bcrypt.compare(trimmedPassword, admin.password);
-        if (!isMatch) {
-            console.log("Password does not match");
-            return res.status(401).json({ success: false, msg: "Incorrect username or password" });
-        }
-
-        // Generate a token
-        const token = jwt.sign({ username: admin.username, adminId: admin._id }, JWT_SECRET, {
-            expiresIn: "1h", // Token expiration time
-        });
-
-        console.log("Login successful, token generated:", token);
-
-        // Send success response with the token
-        res.json({ success: true, token });
+      console.log("Received signin request:", { email, password }) // Debug log
+  
+      // Find admin by email
+      const admin = await Admin.findOne({ email })
+  
+      // If admin is not found
+      if (!admin) {
+        console.log("Admin not found for email:", email)
+        return res.status(401).json({ success: false, msg: "Incorrect email or password" })
+      }
+  
+      console.log("Admin found:", admin)
+  
+      // Compare passwords
+      const isMatch = await bcrypt.compare(password, admin.password)
+      if (!isMatch) {
+        console.log("Password does not match")
+        return res.status(401).json({ success: false, msg: "Incorrect email or password" })
+      }
+  
+      // Generate a token
+      const token = jwt.sign({ email: admin.email, adminId: admin._id }, JWT_SECRET, {
+        expiresIn: "1h", // Token expiration time
+      })
+  
+      console.log("Login successful, token generated:", token)
+  
+      // Send success response with the token
+      res.json({ success: true, token })
     } catch (error) {
-        console.error("Signin Error:", error.message);
-        res.status(500).json({ success: false, msg: "Error during signin" });
+      console.error("Signin Error:", error.message)
+      res.status(500).json({ success: false, msg: "Error during signin" })
     }
-});
-
+  })
+  
+  
 
 router.post("/property", adminMiddleware, async (req, res) => {
     const { title, description, price, imagelink } = req.body;

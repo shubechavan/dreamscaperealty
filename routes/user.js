@@ -100,7 +100,7 @@ router.post('/signup', async (req, res) => {
 
 
 
-router.post('/signin', async (req, res) => {
+/*router.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -138,7 +138,44 @@ router.post('/signin', async (req, res) => {
         console.error("Error during signin:", error);
         res.status(500).json({ msg: "An internal server error occurred", error: error.message });
     }
-});
+});*/
+// Update the signin route
+router.post("/signin", async (req, res) => {
+    const { email, password } = req.body
+  
+    try {
+      console.log("Received signin request:", { email, password }) // Debug log
+  
+      // Find the user by email
+      const user = await User.findOne({ email })
+  
+      if (!user) {
+        console.log("User not found") // Debug log
+        return res.status(401).json({ msg: "Incorrect email or password" })
+      }
+  
+      console.log("User found:", user) // Debug log
+  
+      // Compare the hashed password with the plain-text password
+      const isPasswordValid = await bcrypt.compare(password, user.password)
+  
+      if (!isPasswordValid) {
+        console.log("Invalid password") // Debug log
+        return res.status(401).json({ msg: "Incorrect email or password" })
+      }
+  
+      // Generate a JWT token
+      const token = jwt.sign({ email: user.email, userId: user._id }, JWT_SECRET, { expiresIn: "1h" })
+      console.log("Token generated:", token) // Debug log
+  
+      res.json({ token })
+    } catch (error) {
+      console.error("Error during signin:", error)
+      res.status(500).json({ msg: "An internal server error occurred", error: error.message })
+    }
+  })
+  
+  
 
 
 router.get('/property', async (req, res) => {

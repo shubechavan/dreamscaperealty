@@ -1,26 +1,27 @@
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('../config');
+const jwt = require("jsonwebtoken")
+const { JWT_SECRET } = require("../config")
 
 function adminMiddleware(req, res, next) {
-    const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization
 
-    if (!authHeader) {
-        return res.status(401).json({ msg: "No token provided" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, msg: "No token provided or invalid format" })
+  }
+
+  const token = authHeader.split(" ")[1]
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET)
+    if (!decoded.adminId) {
+      throw new Error("Not an admin token")
     }
-
-    const token = authHeader.split(' ')[1]; // Bearer <Token>
-
-    if (!token) {
-        return res.status(401).json({ msg: "Invalid token format" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.admin = decoded; // Attach decoded token data to request
-        next();
-    } catch (error) {
-        res.status(403).json({ msg: "Invalid or expired token" });
-    }
+    req.admin = decoded
+    next()
+  } catch (error) {
+    console.error("Admin authentication error:", error.message)
+    res.status(403).json({ success: false, msg: "Invalid or expired token" })
+  }
 }
 
-module.exports = adminMiddleware;
+module.exports = adminMiddleware
+

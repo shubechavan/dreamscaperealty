@@ -11,29 +11,32 @@ import UserRegister from "./pages/UserRegister"
 import AdminRegister from "./pages/AdminRegister"
 import UserDashboard from "./pages/UserDashboard"
 import AdminDashboard from "./pages/AdminDashboard"
+import { AuthProvider } from "./context/AuthContext"
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/properties" element={<Properties />} />
-            <Route path="/property/:id" element={<SingleProperty />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/user/login" element={<UserLogin />} />
-            <Route path="/user/register" element={<UserRegister />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/register" element={<AdminRegister />} />
-            <Route path="/user/dashboard" element={<UserDashboard />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/properties" element={<Properties />} />
+              <Route path="/property/:id" element={<SingleProperty />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/user/login" element={<UserLogin />} />
+              <Route path="/user/register" element={<UserRegister />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/register" element={<AdminRegister />} />
+              <Route path="/user/dashboard" element={<UserDashboard />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </AuthProvider>
   )
 }
 
