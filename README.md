@@ -3,7 +3,11 @@
 A modern real estate platform built with React and Node.js that enables users to explore, purchase, and manage properties. The platform features a sophisticated admin portal for property management, user authentication, and a responsive design optimized for all devices.
 
 <div align="center">
+<<<<<<< HEAD
   <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp_Image_2024-07-14_at_14.48.13_6a45f127-removebg-gJJvyU2V484RGIQT5DEYeT3E7HwC4O.png" alt="Dreamscape Realty Logo" width="200">
+=======
+  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-X2Fm5RA5MqKBdCkbbLYn0bWtCeekD0.png" alt="Dreamscape Realty Logo" width="200">
+>>>>>>> 51f2663530b60d64fb791c9f4dbef99f141db81a
 </div>
 
 ## Features
