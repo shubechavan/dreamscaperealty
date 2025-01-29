@@ -83,7 +83,7 @@ router.post("/signin", async (req, res) => {
         return res.status(401).json({ success: false, msg: "Incorrect email or password" })
       }
   
-      // Generate a token
+      
       const token = jwt.sign({ email: admin.email, adminId: admin._id }, JWT_SECRET, {
         expiresIn: "1h", // Token expiration time
       })
