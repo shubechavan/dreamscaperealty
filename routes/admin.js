@@ -65,10 +65,10 @@ router.post("/signin", async (req, res) => {
     try {
       console.log("Received signin request:", { email, password }) // Debug log
   
-      // Find admin by email
+      
       const admin = await Admin.findOne({ email })
   
-      // If admin is not found
+      
       if (!admin) {
         console.log("Admin not found for email:", email)
         return res.status(401).json({ success: false, msg: "Incorrect email or password" })
