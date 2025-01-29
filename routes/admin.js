@@ -76,7 +76,7 @@ router.post("/signin", async (req, res) => {
   
       console.log("Admin found:", admin)
   
-      // Compare passwords
+      
       const isMatch = await bcrypt.compare(password, admin.password)
       if (!isMatch) {
         console.log("Password does not match")
